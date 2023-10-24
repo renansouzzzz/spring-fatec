@@ -17,15 +17,13 @@ public class UserController {
 
     private final UserService service;
 
-    private final UserRepository repository;
-
     @PostMapping
     public ResponseEntity<User> post(@RequestBody User user) {
 
         return ResponseEntity.accepted().body(service.create(user));
     }
 
-    @PutMapping
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> put(@PathVariable Long id, @RequestBody User user) {
 
         return ResponseEntity.accepted().body(service.update(user, id));
@@ -37,9 +35,15 @@ public class UserController {
         return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/getById")
-    public ResponseEntity<User> getById(Long id) {
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<User> getById(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(service.getById(id));
+    }
+
+    @PutMapping("/delete/{id}")
+    public void deleteByActive(@PathVariable Long id) {
+
+        service.deleteActive(id);
     }
 }

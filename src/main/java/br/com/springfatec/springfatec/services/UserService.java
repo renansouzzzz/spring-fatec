@@ -26,15 +26,24 @@ public class UserService {
 
     public User create(User user) {
 
-        User userCreate = new User();
+        try {
+            User userCreate = new User();
 
-        userCreate.setName(user.getName());
-        userCreate.setEmail(user.getEmail());
-        userCreate.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userCreate.setJobRole(user.getJobRole());
+            userCreate.setName(user.getName());
+            userCreate.setEmail(user.getEmail());
+            userCreate.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userCreate.setJobRole(user.getJobRole());
 
-        repository.save(userCreate);
-        return userCreate;
+            repository.save(userCreate);
+
+            return userCreate;
+        }
+
+        catch (Exception ex) {
+            ex.getMessage();
+        }
+
+        return new User();
     }
 
     public User update(User user, Long id) {
@@ -55,10 +64,12 @@ public class UserService {
         catch (Exception ex) {
             ex.getMessage();
         }
+
         return new User();
     }
 
     public List<User> getAll() {
+
         List<User> userGetAll = repository.findAll();
 
         return userGetAll;
@@ -66,7 +77,23 @@ public class UserService {
 
     public User getById(Long id) {
 
-        User getById = repository.getReferenceById(id);
-        return getById;
+        User getById = repository.getById(id);
+        User user = new User();
+
+        user.setId(getById.getId());
+        user.setEmail(getById.getEmail());
+        user.setName(getById.getName());
+        user.setPassword(getById.getPassword());
+        user.setJobRole(getById.getJobRole());
+
+        return user;
+    }
+
+    public void deleteActive(Long id) {
+
+        User activeUser = repository.getById(id);
+
+        activeUser.setActive(false);
+        repository.save(activeUser);
     }
 }
