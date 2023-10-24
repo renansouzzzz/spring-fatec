@@ -14,10 +14,15 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserService(UserRepository repository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.repository = repository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
 
     public User create(User user) {
 
@@ -29,27 +34,39 @@ public class UserService {
         userCreate.setJobRole(user.getJobRole());
 
         repository.save(userCreate);
-
         return userCreate;
     }
 
-    public User update(User user, UUID id) {
+    public User update(User user, Long id) {
 
-        User userUpdate = repository.findById(id).get();
+        try {
+            User userUpdate = repository.findById(id).get();
 
-        userUpdate.setName(user.getName());
-        userUpdate.setEmail(user.getEmail());
-        userUpdate.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userUpdate.setJobRole(user.getJobRole());
+            userUpdate.setName(user.getName());
+            userUpdate.setEmail(user.getEmail());
+            userUpdate.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userUpdate.setJobRole(user.getJobRole());
 
-        repository.save(userUpdate);
+            repository.save(userUpdate);
 
-        return userUpdate;
+            return userUpdate;
+        }
+
+        catch (Exception ex) {
+            ex.getMessage();
+        }
+        return new User();
     }
 
     public List<User> getAll() {
         List<User> userGetAll = repository.findAll();
 
         return userGetAll;
+    }
+
+    public User getById(Long id) {
+
+        User getById = repository.getReferenceById(id);
+        return getById;
     }
 }
