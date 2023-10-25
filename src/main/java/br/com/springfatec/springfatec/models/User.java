@@ -38,8 +38,6 @@ public class User {
     @NotBlank(message = "Cargo não pode ser nulo!")
     private String jobRole;
 
-
-    @JsonIgnore
     @Column
     @Value("${props.bollean.isActive:#{true}}")
     private boolean active = true;
