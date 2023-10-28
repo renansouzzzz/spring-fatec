@@ -1,23 +1,21 @@
 import './Listagem.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import ContextApp from '../../context/Mycontext';
+
 
 const Listagem = () => {
-    const [data, setData] = useState([{
-        id: 0,
-        nome: "",
-        email: "",
-        senha: "",
-        cargo: "",
-        status: ""
-    }]);
+    const {user, setUser} = useContext(ContextApp);
 
     useEffect(() => {
-        axios.get('')
-            .then(response => setData(response.json))
+        axios.get('http://localhost:8080/api/v1/user')
+            .then(response => {
+                setUser([...user, response.data])
+                console.log(response.data)
+            })
             .catch((e) => console.log(e))
-    })
+    }, [])
 
 
     return (
@@ -28,20 +26,18 @@ const Listagem = () => {
                         <tr>
                             <th>Nome</th>
                             <th>Email</th>
-                            <th>Senha</th>
                             <th>Cargo</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map(item => {
+                        {user.map(item => {
                             return (
                                 <tr key={item.id}>
-                                    <td>{item.nome}</td>
+                                    <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    <td>{item.senha}</td>
-                                    <td>{item.cargo}</td>
-                                    <td>{item.status}</td>
+                                    <td>{item.jobRole}</td>
+                                    <td>{item.status ? 'Inativo' : 'Ativo'}</td>
                                 </tr>
                             )
                         })}

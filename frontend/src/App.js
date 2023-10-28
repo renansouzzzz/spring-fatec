@@ -6,18 +6,15 @@ import ContextApp from "./context/Mycontext";
 import { useState } from 'react'
 
 function App() {
-
-  const [data, setData] = useState([{
-    id: 0,
-    nome: "",
-    email: "",
-    senha: "",
-    cargo: "",
-    status: ""
-  }]);
+  const [user, setUser] = useState([{
+    name: '',
+    email: '',
+    password: '',
+    jobRole: ''
+}])
 
   return (
-    <ContextApp.Provider value={[data, setData]}>
+    <ContextApp.Provider value={{user, setUser}}>
       <BrowserRouter>
         <Routes>
           <Route path="/" Component={Cadastro} />
