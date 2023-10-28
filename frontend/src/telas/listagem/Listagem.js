@@ -4,24 +4,22 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ContextApp from '../../context/Mycontext';
 
+const postInative = (userId) => {
+    console.log(userId)
+    axios.put(`http://localhost:8080/api/v1/user/delete/${userId}`)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error('Erro ao inativar usuário:', error);
+        });
+};
+
 const Listagem = () => {
     const { user, setUser } = useContext(ContextApp);
-
-    const postInative = (userId) => {
-        axios.post(`http://localhost:8080/api/v1/user/delete/${userId}`)
-            .then(response => {
-                setUser(response.data);
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Erro ao inativar usuário:', error);
-            });
-    };
-
     useEffect(() => {
         axios.get('http://localhost:8080/api/v1/user')
             .then(response => {
-                // Certifique-se de que `response.data` seja um array, se não, ajuste conforme necessário.
                 setUser(response.data);
                 console.log(response.data);
             })
@@ -43,7 +41,7 @@ const Listagem = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {user.map(item => (
+                        {Array.isArray(user) && user.map(item => (
                             <tr key={item.id}>
                                 <td>{item.name}</td>
                                 <td>{item.email}</td>
