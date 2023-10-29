@@ -38,6 +38,6 @@ public class User {
     private String jobRole;
 
     @Column
-    @Value("${props.bollean.isActive:#{true}}")
+    @Value("${props.boolean.isActive:#{true}}")
     private boolean active = true;
 }

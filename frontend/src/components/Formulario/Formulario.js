@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import Input from '../Input/Input'
 import './Formulario.css';
 import { Link } from 'react-router-dom';
