@@ -1,32 +1,46 @@
 import './Listagem.css';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ContextApp from '../../context/Mycontext';
-
-const postInative = (userId) => {
-    console.log(userId)
-    axios.put(`http://localhost:8080/api/v1/user/delete/${userId}`)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Erro ao inativar usuário:', error);
-        });
-};
+import throttle from 'lodash/throttle';
 
 const Listagem = () => {
+
     const { user, setUser } = useContext(ContextApp);
-    useEffect(() => {
-        axios.get('http://localhost:8080/api/v1/user')
-            .then(response => {
-                setUser(response.data);
-                console.log(response.data);
+    
+    useEffect(
+        throttle(() => {
+            {
+                axios.get('http://localhost:8080/api/v1/user')
+                   .then(data => {
+                       setUser(data.data);
+                       console.log(data.data)
+                   })
+                   .catch(error => {
+                       console.error('Erro ao buscar dados da API:', error);
+                   });
+           }
+        }, 1000),
+        [user]
+      );
+
+    const postInative = (userId) => {
+
+        axios.put(`http://localhost:8080/api/v1/user/delete/${userId}`)
+            .then(() => {
+                const updatedUser = user.map(item => {
+                    if (item.id === userId) {
+                        return { ...item, active: false };
+                    }
+                    return item;
+                });
+                setUser(updatedUser)
             })
             .catch(error => {
-                console.error('Erro ao buscar dados da API:', error);
+                console.error('Erro ao inativar usuário:', error);
             });
-    }, []);
+    };
 
     return (
         <div className="container">
@@ -38,6 +52,7 @@ const Listagem = () => {
                             <th>Email</th>
                             <th>Cargo</th>
                             <th>Status</th>
+                            <th>Inativar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,13 +61,9 @@ const Listagem = () => {
                                 <td>{item.name}</td>
                                 <td>{item.email}</td>
                                 <td>{item.jobRole}</td>
-                                <td>{item.status ? 'Inativo' : 'Ativo'}</td>
+                                <td>{item.active ? 'Ativo' : 'Inativo'}</td>
                                 <td>
-                                    {item.status ? (
-                                        "Inativo"
-                                    ) : (
-                                        <button onClick={postInative(item.id)}>Inativar</button>
-                                    )}
+                                <button onClick={() => postInative(item.id)}>Inativar</button>
                                 </td>
                             </tr>
                         ))}

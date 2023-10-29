@@ -10,7 +10,8 @@ function App() {
     name: '',
     email: '',
     password: '',
-    jobRole: ''
+    jobRole: '',
+    active: true,
 }])
 
   return (
