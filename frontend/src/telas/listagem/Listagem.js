@@ -21,7 +21,7 @@ const Listagem = () => {
                        console.error('Erro ao buscar dados da API:', error);
                    });
            }
-        }, 1000),
+        }, 500000000),
         [user]
       );
 
