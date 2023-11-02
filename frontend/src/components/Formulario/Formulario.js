@@ -50,6 +50,7 @@ const Formulario = () => {
                         label="Senha"
                         placeHolder="Digite sua senha"
                         valor={user.password}
+                        type="password"
                         aoAlterado={valor => setUser({ ...user, password: valor })}
                     />
                     <Input

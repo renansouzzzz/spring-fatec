@@ -2,6 +2,7 @@ package br.com.springfatec.springfatec.services;
 
 import br.com.springfatec.springfatec.models.User;
 import br.com.springfatec.springfatec.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -9,16 +10,12 @@ import java.util.List;
 
 
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public UserService(UserRepository repository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.repository = repository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
 
 
     public User create(User user) {
